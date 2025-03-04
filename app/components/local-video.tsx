@@ -3,6 +3,8 @@ import { Button, Text, SafeAreaView, ScrollView, StyleSheet, Image, View, Platfo
 import * as MediaLibrary from 'expo-media-library';
 import * as DocumentPicker from 'expo-document-picker';
 import { useRouter } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 type Album = MediaLibrary.Album;
 type Asset = MediaLibrary.Asset;
@@ -60,8 +62,8 @@ export default function VideoBrowser() {
         });
       }
     }
-    console.log(videoAlbum, 'videoAlbum');
-    console.log(fetchedAlbums, 'fetchedAlbums');
+    // console.log(videoAlbum, 'videoAlbum');
+    // console.log(fetchedAlbums, 'fetchedAlbums');
     
     setAlbums(fetchedAlbums);
     setVideoAlbums(videoAlbum)
@@ -113,17 +115,26 @@ type AlbumEntryProps = {
   album: Album;
   videoCount: number;
 };
+type RootStackParamList = {
+  AlbumEntry: undefined;
+  AlbumVideos: {
+    albumId: string;
+    albumTitle: string;
+  };
+};
+type AlbumVideosNavigationProp = StackNavigationProp<RootStackParamList, 'AlbumVideos'>;
 
 function AlbumEntry({ album, videoCount }: AlbumEntryProps) {
-  const router = useRouter();
+  // const router = useRouter();
+  const navigation = useNavigation<AlbumVideosNavigationProp>();
   function getAlbumVideos() {
-    // navigation.navigate('AlbumVideos', {albumId: album.id, albumTitle: album.title});
-    console.log(album, 'album');
+    navigation.navigate('AlbumVideos', {albumId: album.id, albumTitle: album.title});
+    // console.log(album, 'album');
     
-    router.push({
-        pathname: '/components/albumVideos',
-        params: { albumId: album.id, albumTitle: album.title },
-    })
+    // router.push({
+    //     pathname: '/components/albumVideos',
+    //     params: { albumId: album.id, albumTitle: album.title },
+    // })
   }
 
   return (

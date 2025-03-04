@@ -1,10 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
+import { useRoute } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
+
+type RootStackParamList = {
+  AlbumEntry: undefined;
+  AlbumVideos: {
+    albumId: string;
+    albumTitle: string;
+  };
+};
+
+type AlbumVideosRouteProp = RouteProp<RootStackParamList, 'AlbumVideos'>;
 
 type Asset = MediaLibrary.Asset;
 
-export default function AlbumVideos({ route }: any) {
+export default function AlbumVideos() {
+    const route = useRoute<AlbumVideosRouteProp>();
     const { albumId, albumTitle } = route.params;
     const [videos, setVideos] = useState<Asset[]>([]);
 

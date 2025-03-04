@@ -1,11 +1,17 @@
-import { Stack } from 'expo-router';
+// import { Stack } from 'expo-router';
+import { createStackNavigator } from '@react-navigation/stack';
+import AlbumVideos from './components/albumVideos';
+import index from './index';
+import localVideo from './components/local-video';
+
+const Stack = createStackNavigator();
 
 export default function Layout() {
     return (
-        <Stack>
-            <Stack.Screen name="index" options={{ title: "Home" }} />
-            <Stack.Screen name="video" options={{ title: "3D Video Player" }} />
-            <Stack.Screen name="/components/albumVideos" options={{ title: "Album Videos" }} />
-        </Stack>
+        <Stack.Navigator>
+            <Stack.Screen name="Home" component={index} />
+            <Stack.Screen name="Local" component={localVideo} />
+            <Stack.Screen name="AlbumVideos" component={AlbumVideos} />
+        </Stack.Navigator>
     );
 }
