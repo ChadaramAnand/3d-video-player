@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import VideoScene from './components/VideoScene';
+import VideoScene from './VideoScene';
 
 export default function VideoPlayerScreen() {
     return (
