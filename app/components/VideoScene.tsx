@@ -2,11 +2,31 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import RegularVideoPlayer from './RegularVideoPlayer';
 import PanoramaVideoPlayer from './PanoramaVideoPlayer';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+
 // Future import (you'll add this when ready for 3D)
 // import ThreeDSceneWithVideo from './ThreeDSceneWithVideo';
 
+
+type RootStackParamList = {
+    AlbumVideos: {
+        albumId: string;
+        albumTitle: string;
+    };
+    VideoScene: {
+        videoId: string;
+        videoUrl: string; 
+        videoTitle: string;
+    };
+};
+
+type VideoSceneRouteProp = RouteProp<RootStackParamList, 'VideoScene'>;
+
 export default function VideoScene() {
     const [mode, setMode] = useState<'regular' | '360' | '3d'>('regular');
+    const route = useRoute<VideoSceneRouteProp>();
+    const { videoId, videoUrl, videoTitle } = route.params;
 
     return (
         <View style={styles.container}>
@@ -19,7 +39,7 @@ export default function VideoScene() {
             </View>
 
             <View style={styles.playerContainer}>
-                {mode === 'regular' && <RegularVideoPlayer />}
+                {mode === 'regular' && <RegularVideoPlayer videoUrl={videoUrl} />}
                 {mode === '360' && <PanoramaVideoPlayer />}
                 {mode === '3d' && (
                     <Text style={styles.placeholder}>3D Scene Video - (Coming Soon)</Text>

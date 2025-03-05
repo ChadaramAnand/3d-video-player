@@ -4,7 +4,11 @@ import {Video, ResizeMode} from 'expo-av';
 
 const { width, height } = Dimensions.get('window');
 
-export default function VideoScene() {
+interface RegularVideoPlayerProps {
+    videoUrl: string; // Ensure this is a string
+  }
+
+export default function VideoScene({videoUrl} : RegularVideoPlayerProps) {
     const [isFullScreen, setIsFullScreen] = useState(false);
 
     const toggleFullScreen = () => {
@@ -18,6 +22,7 @@ export default function VideoScene() {
                 <View style={styles.videoContainer}>
                     <Video
                         source={require('../../assets/video/sample.mp4')}
+                        // source={videoUrl}
                         style={styles.video}
                         resizeMode={ResizeMode.COVER}
                         useNativeControls

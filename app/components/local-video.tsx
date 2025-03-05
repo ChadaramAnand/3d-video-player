@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Button, Text, SafeAreaView, ScrollView, StyleSheet, Image, View, Platform, Alert, TouchableOpacity, Pressable } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import * as DocumentPicker from 'expo-document-picker';
-import { useRouter } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
@@ -116,7 +115,6 @@ type AlbumEntryProps = {
   videoCount: number;
 };
 type RootStackParamList = {
-  AlbumEntry: undefined;
   AlbumVideos: {
     albumId: string;
     albumTitle: string;
@@ -125,16 +123,9 @@ type RootStackParamList = {
 type AlbumVideosNavigationProp = StackNavigationProp<RootStackParamList, 'AlbumVideos'>;
 
 function AlbumEntry({ album, videoCount }: AlbumEntryProps) {
-  // const router = useRouter();
   const navigation = useNavigation<AlbumVideosNavigationProp>();
   function getAlbumVideos() {
     navigation.navigate('AlbumVideos', {albumId: album.id, albumTitle: album.title});
-    // console.log(album, 'album');
-    
-    // router.push({
-    //     pathname: '/components/albumVideos',
-    //     params: { albumId: album.id, albumTitle: album.title },
-    // })
   }
 
   return (

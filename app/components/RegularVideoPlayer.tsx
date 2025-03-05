@@ -2,10 +2,13 @@ import { useEvent } from 'expo';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { StyleSheet, View, Button } from 'react-native';
 
-const videoSource =require('../../assets/video/sample.mp4')
+const videoSource =require('../../assets/video/sample.mp4');
 
-export default function VideoScreen() {
-  const player = useVideoPlayer(videoSource, player => {
+interface RegularVideoPlayerProps {
+  videoUrl: string; // Ensure this is a string
+}
+export default function VideoScreen({videoUrl} : RegularVideoPlayerProps) {
+  const player = useVideoPlayer(videoUrl, player => {
     player.loop = true;
     player.play();
   });
