@@ -53,6 +53,20 @@ export default function AlbumVideos() {
         setVideos(allAssets);
     }
 
+    const formatDuration = (duration: number) => {
+        const hours = Math.floor(duration / 3600);
+        const minutes = Math.floor((duration % 3600) / 60);
+        const seconds = Math.floor(duration % 60);
+    
+        if (hours > 0) {
+            // Format as h:mm:ss
+            return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        } else {
+            // Format as mm:ss
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+    };
+
     const renderVideo = ({ item }: { item: Asset }) => (
         <TouchableOpacity
             style={styles.videoItem}
@@ -65,10 +79,17 @@ export default function AlbumVideos() {
             }
         >
             <View style={styles.videoItem}>
+                <View style={styles.thumbnailContainer}>
                 <Image source={{ uri: item.uri }} style={styles.thumbnail} />
-                <View >
-                    <Text numberOfLines={1} style={styles.videoName}>{item.filename}</Text>
+                <View style={styles.durationContainer}>
+                    <Text style={styles.durationText}>
+                        {formatDuration(item.duration)}
+                    </Text>
                 </View>
+            </View>
+            <Text numberOfLines={1} style={styles.videoName}>
+                {item.filename}
+            </Text>
             </View>
         </TouchableOpacity>
     );
@@ -90,8 +111,40 @@ export default function AlbumVideos() {
 const styles = StyleSheet.create({
     container: { flex: 1, padding: 10 },
     header: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
-    videoItem: { width: '30%', margin: '1.5%', alignItems: 'center', flexDirection: 'row' },
-    thumbnail: { width: 100, height: 100, borderRadius: 8 },
-    videoName: { fontSize: 16, textAlign: 'center', marginTop: 5 },
-    videoTitle: {flex: 1}
+    // videoItem: { width: '30%', margin: '1.5%', alignItems: 'center', flexDirection: 'row' },
+    videoItem: {
+        width: '100%',    // Take full width to show filename properly
+        marginVertical: 2,
+        alignItems: 'center',
+        flexDirection: 'row',    // Keep thumbnail and text in row
+        paddingHorizontal: 10,   // Add some padding
+    },
+    thumbnail: {
+        width: 100,
+        height: 80,
+        borderRadius: 8,
+    },
+    videoName: {
+        fontSize: 16,
+        flexShrink: 1,       // Allow it to shrink if needed
+        marginLeft: 10,      // Space between thumbnail and text
+    },
+    videoTitle: {flex: 1},
+    thumbnailContainer: {
+        position: 'relative', // Allows absolute positioning of duration
+    },
+    durationContainer: {
+        position: 'absolute',
+        bottom: 5,
+        right: 5,
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        paddingVertical: 2,
+        paddingHorizontal: 4,
+        borderRadius: 4,
+    },
+    durationText: {
+        color: 'white',
+        fontSize: 12,
+        fontWeight: 'bold',
+    }
 });

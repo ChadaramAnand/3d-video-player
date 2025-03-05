@@ -10,8 +10,8 @@ const Stack = createStackNavigator();
 export default function Layout() {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Home" component={index} />
-            <Stack.Screen name="Local" component={localVideo} />
+            {/* <Stack.Screen name="Home" component={index} /> */}
+            <Stack.Screen name="All Videos" component={localVideo} />
             <Stack.Screen name="AlbumVideos" component={AlbumVideos} />
             <Stack.Screen name="VideoScene" component={VideoScene} />
         </Stack.Navigator>
