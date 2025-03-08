@@ -1,35 +1,73 @@
-import { useEvent } from 'expo';
-import { useVideoPlayer, VideoView } from 'expo-video';
-import { StyleSheet, View, Button } from 'react-native';
-
-const videoSource =require('../../assets/video/sample.mp4');
+import React, { useState, useEffect, useRef } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Video, ResizeMode, VideoReadyForDisplayEvent, VideoFullscreenUpdateEvent } from 'expo-av';
+import * as ScreenOrientation from 'expo-screen-orientation';
+import { BackHandler } from 'react-native';
 
 interface RegularVideoPlayerProps {
-  videoUrl: string; // Ensure this is a string
+  videoUrl: string;
+  onBack?: () => void;
 }
-export default function VideoScreen({videoUrl} : RegularVideoPlayerProps) {
-  const player = useVideoPlayer(videoUrl, player => {
-    player.loop = true;
-    player.play();
-  });
 
-  const { isPlaying } = useEvent(player, 'playingChange', { isPlaying: player.playing });
+export default function VideoScreen({ videoUrl, onBack }: RegularVideoPlayerProps) {
+  const video = useRef<Video>(null);
+  const [videoDimensions, setVideoDimensions] = useState<{ width: number; height: number } | null>(null);
+
+  useEffect(() => {
+    const lockInitialOrientation = async () => {
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+    };
+
+    lockInitialOrientation();
+
+    return () => {
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (video.current) {
+      video.current.presentFullscreenPlayer();
+      video.current.playAsync();
+    }
+  }, [video.current]);
+
+  const changeScreenOrientation = async (isLandscape: boolean) => {
+    if (isLandscape) {
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+    } else {
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+    }
+  };
+
+  const onReadyForDisplay = (event: VideoReadyForDisplayEvent) => {
+    if (!videoDimensions) {
+      setVideoDimensions(event.naturalSize);
+      const isLandscape = event.naturalSize.width > event.naturalSize.height;
+
+      changeScreenOrientation(isLandscape);
+    }
+  };
+  const handleFullScreenUpdate = (event: VideoFullscreenUpdateEvent) => {
+    if(event.fullscreenUpdate > 2 && onBack) {
+        onBack();
+    }
+  }
 
   return (
     <View style={styles.contentContainer}>
-      <VideoView style={styles.video} player={player} allowsFullscreen allowsPictureInPicture />
-      <View style={styles.controlsContainer}>
-        <Button
-          title={isPlaying ? 'Pause' : 'Play'}
-          onPress={() => {
-            if (isPlaying) {
-              player.pause();
-            } else {
-              player.play();
-            }
-          }}
-        />
-      </View>
+      <Video
+        ref={video}
+        style={styles.video}
+        source={{
+          uri: videoUrl,
+        }}
+        useNativeControls
+        resizeMode={ResizeMode.CONTAIN}
+        isLooping
+        onReadyForDisplay={onReadyForDisplay}
+        onFullscreenUpdate={handleFullScreenUpdate}
+      />
     </View>
   );
 }
@@ -37,16 +75,13 @@ export default function VideoScreen({videoUrl} : RegularVideoPlayerProps) {
 const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
-    padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 50,
+    backgroundColor: 'black',
   },
   video: {
-    width: 350,
-    height: 275,
-  },
-  controlsContainer: {
-    padding: 10,
+    alignSelf: 'center',
+    width: '100%',
+    height: '100%',
   },
 });

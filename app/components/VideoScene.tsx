@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import RegularVideoPlayer from './RegularVideoPlayer';
 import PanoramaVideoPlayer from './PanoramaVideoPlayer';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 // Future import (you'll add this when ready for 3D)
@@ -27,10 +27,14 @@ export default function VideoScene() {
     const [mode, setMode] = useState<'regular' | '360' | '3d'>('regular');
     const route = useRoute<VideoSceneRouteProp>();
     const { videoId, videoUrl, videoTitle } = route.params;
+    const navigation = useNavigation();
+    const handleBack = () => {
+        navigation.goBack();
+      };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Choose Video Mode</Text>
+            {/* <Text style={styles.header}>Choose Video Mode</Text>
 
             <View style={styles.buttonContainer}>
                 <Button title="Regular Video" onPress={() => setMode('regular')} />
@@ -45,7 +49,8 @@ export default function VideoScene() {
                     <Text style={styles.placeholder}>3D Scene Video - (Coming Soon)</Text>
                     // Once ready, replace above with <ThreeDSceneWithVideo />
                 )}
-            </View>
+            </View> */}
+            <RegularVideoPlayer videoUrl={videoUrl} onBack={handleBack}/>
         </View>
     );
 }

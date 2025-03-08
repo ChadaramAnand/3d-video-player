@@ -96,7 +96,6 @@ export default function AlbumVideos() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>{albumTitle}</Text>
             <FlatList
                 data={videos}
                 keyExtractor={(item) => item.id}
