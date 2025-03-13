@@ -11,6 +11,7 @@ import {
   Modal,
   ActivityIndicator,
   RefreshControl,
+  Image,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 import * as MediaLibrary from 'expo-media-library';
@@ -179,7 +180,8 @@ function AlbumEntry({ album, videoCount }: { album: Album; videoCount: number })
     <TouchableOpacity onPress={openAlbumVideos} style={styles.albumContainer}>
       <View style={styles.albumRow}>
         <View style={styles.folderIcon}>
-          <Text style={styles.folderIconText}>📁</Text>
+          {/* <Text style={styles.folderIconText}>📁</Text> */}
+          <Image source={require('../../assets/images/Folder.png') } style={styles.folderImage} />
         </View>
         <View>
           <Text style={styles.albumTitle}>{album.title}</Text>
@@ -216,4 +218,5 @@ const styles = StyleSheet.create({
   videoText: { fontWeight: 'bold' },
   videoUri: { fontSize: 12, color: 'gray' },
   loader: { marginVertical: 20 },
+  folderImage: {width: 50, height: 50}
 });

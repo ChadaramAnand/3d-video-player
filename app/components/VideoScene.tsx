@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
-import RegularVideoPlayer from './RegularVideoPlayer';
+import RegularVideoPlayer from './Regular';
 import PanoramaVideoPlayer from './PanoramaVideoPlayer';
 import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
